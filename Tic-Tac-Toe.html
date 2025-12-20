@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="Tic-Tac-Toe.css">
+    <script src="https://kit.fontawesome.com/d7df01ffeb.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="front" class="screen">
+    <h1>Tic Tac Toe</h1>
+    <button onclick="enterMode('cpu')">Play vs CPU</button>
+    <button onclick="enterMode('two')">2 Player</button>
+</div>
+
+<div id="choice" class="screen">
+    <h1>Choose Your Mark</h1>
+    <button onclick="selectMark('X')">X</button>
+    <button onclick="selectMark('O')">O</button>
+</div>
+
+<div id="game" class="screen">
+    <div class="top">
+        <button onclick="retryGame()">🔁 Retry</button>
+        <button onclick="goHome()">🏠 Home</button>
+    </div>
+
+    <div id="grid"></div>
+
+    <div class="score">
+        <div id="playerScore">YOU<br>0</div>
+        <div id="tieScore">TIES<br>0</div>
+        <div id="cpuScore">CPU<br>0</div>
+    </div>
+</div>
+
+<div id="overlay"></div>
+<div id="popup">
+    <p id="resultText"></p>
+    <button onclick="closePopup()">OK</button>
+</div>
+
+<script src="Tic-Tac-Toe.js"></script>
+</body>
+</html>
