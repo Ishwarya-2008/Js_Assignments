@@ -8,13 +8,15 @@ let scores = { player: 0, cpu: 0, tie: 0 };
 const screens = ["front", "choice", "game"];
 const grid = document.getElementById("grid");
 
-const playerScore = document.getElementById("playerScore");
-const cpuScore = document.getElementById("cpuScore");
-const tieScore = document.getElementById("tieScore");
+const playerScoreValue = document.getElementById("playerScoreValue");
+const cpuScoreValue = document.getElementById("cpuScoreValue");
+const tieScoreValue = document.getElementById("tieScoreValue");
 
 const popup = document.getElementById("popup");
 const overlay = document.getElementById("overlay");
 const resultText = document.getElementById("resultText");
+const popupIcon = document.getElementById("popupIcon");
+const turnIndicator = document.getElementById("turnIndicator");
 
 window.onload = () => show("front");
 
@@ -46,6 +48,7 @@ function selectMark(mark) {
 function startGame() {
     board.fill("");
     currentPlayer = "X";
+    updateTurnIndicator();
     createGrid();
 }
 
@@ -57,6 +60,12 @@ function createGrid() {
         cell.onclick = () => playerMove(i);
         grid.appendChild(cell);
     });
+}
+
+function updateTurnIndicator() {
+    if (turnIndicator) {
+        turnIndicator.textContent = currentPlayer;
+    }
 }
 
 function playerMove(i) {
@@ -74,17 +83,28 @@ function playerMove(i) {
 
     if (mode === "two") {
         currentPlayer = currentPlayer === "X" ? "O" : "X";
+        updateTurnIndicator();
         return;
     }
 
+    // CPU's turn in single player mode
     grid.style.pointerEvents = "none";
-    setTimeout(() => {
-        let best = minimax(board, cpu).index;
-        board[best] = cpu;
-        updateUI();
-        checkEnd();
+    setTimeout(() => cpuMove(), 800);
+}
+
+function cpuMove() {
+    if (checkEnd()) {
         grid.style.pointerEvents = "auto";
-    }, 1000);
+        return;
+    }
+    
+    let best = minimax(board, cpu).index;
+    board[best] = cpu;
+    currentPlayer = player;
+    updateUI();
+    updateTurnIndicator();
+    checkEnd();
+    grid.style.pointerEvents = "auto";
 }
 
 function updateUI() {
@@ -99,12 +119,12 @@ function checkEnd() {
     let win = winner(board);
     if (win) {
         showResult(mode === "two" ? `Player ${win} Wins!` :
-            win === player ? "You Win!" : "CPU Wins!");
+            win === player ? "You Win!" : "CPU Wins!", win);
         updateScore(win);
         return true;
     }
     if (!board.includes("")) {
-        showResult("Draw!");
+        showResult("It's a Draw!", "tie");
         scores.tie++;
         updateScoreUI();
         return true;
@@ -112,8 +132,18 @@ function checkEnd() {
     return false;
 }
 
-function showResult(msg) {
+function showResult(msg, type) {
     resultText.innerText = msg;
+    
+    // Update popup icon based on result
+    if (type === "tie") {
+        popupIcon.innerHTML = '<i class="fa-solid fa-handshake" style="color: #cbd5e1;"></i>';
+    } else if (msg.includes("You Win")) {
+        popupIcon.innerHTML = '<i class="fa-solid fa-trophy" style="color: #10b981;"></i>';
+    } else {
+        popupIcon.innerHTML = '<i class="fa-solid fa-robot" style="color: #f59e0b;"></i>';
+    }
+    
     overlay.style.display = popup.style.display = "block";
 }
 
@@ -122,8 +152,15 @@ function closePopup() {
     startGame();
 }
 
-function retryGame() { startGame(); }
-function goHome() { show("front"); }
+function retryGame() {
+    startGame();
+}
+
+function goHome() {
+    scores = { player: 0, cpu: 0, tie: 0 };
+    updateScoreUI();
+    show("front");
+}
 
 function updateScore(win) {
     if (mode === "two") {
@@ -135,9 +172,9 @@ function updateScore(win) {
 }
 
 function updateScoreUI() {
-    playerScore.innerHTML = `YOU<br>${scores.player}`;
-    cpuScore.innerHTML = `CPU<br>${scores.cpu}`;
-    tieScore.innerHTML = `TIES<br>${scores.tie}`;
+    playerScoreValue.textContent = scores.player;
+    cpuScoreValue.textContent = scores.cpu;
+    tieScoreValue.textContent = scores.tie;
 }
 
 function minimax(b, turn) {

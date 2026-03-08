@@ -2,45 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tic Tac Toe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - Portfolio Project</title>
     <link rel="stylesheet" href="Tic-Tac-Toe.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/d7df01ffeb.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <div class="particles"></div>
+    
+    <div class="container">
+        <div id="front" class="screen">
+            <div class="game-header">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h1 class="main-title">Tic Tac Toe</h1>
+                    <p class="subtitle">Challenge yourself or play with friends</p>
+                </div>
+            </div>
+            
+            <div class="menu-buttons">
+                <button class="btn btn-primary" onclick="enterMode('cpu')">
+                    <i class="fa-solid fa-robot"></i>
+                    <span>Play vs AI</span>
+                    <div class="btn-glow"></div>
+                </button>
+                <button class="btn btn-secondary" onclick="enterMode('two')">
+                    <i class="fa-solid fa-users"></i>
+                    <span>2 Players</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+        </div>
 
-<div id="front" class="screen">
-    <h1>Tic Tac Toe</h1>
-    <button onclick="enterMode('cpu')">Play vs CPU</button>
-    <button onclick="enterMode('two')">2 Player</button>
-</div>
+        <div id="choice" class="screen">
+            <div class="choice-header">
+                <h1>Choose Your Mark</h1>
+                <p class="hint">Pick your side and start the battle!</p>
+            </div>
+            
+            <div class="choice-buttons">
+                <button class="choice-btn" onclick="selectMark('X')">
+                    <i class="fa-solid fa-xmark choice-icon"></i>
+                    <span class="choice-label">Player X</span>
+                </button>
+                <button class="choice-btn" onclick="selectMark('O')">
+                    <i class="fa-regular fa-circle choice-icon"></i>
+                    <span class="choice-label">Player O</span>
+                </button>
+            </div>
+        </div>
 
-<div id="choice" class="screen">
-    <h1>Choose Your Mark</h1>
-    <button onclick="selectMark('X')">X</button>
-    <button onclick="selectMark('O')">O</button>
-</div>
+        <div id="game" class="screen">
+            <div class="game-container">
+                <div class="game-top">
+                    <div class="game-info">
+                        <h2 class="current-player">Current Turn: <span id="turnIndicator">X</span></h2>
+                    </div>
+                    <div class="game-controls">
+                        <button class="control-btn" onclick="retryGame()" title="Restart Game">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                        <button class="control-btn" onclick="goHome()" title="Back to Menu">
+                            <i class="fa-solid fa-house"></i>
+                        </button>
+                    </div>
+                </div>
 
-<div id="game" class="screen">
-    <div class="top">
-        <button onclick="retryGame()">🔁 Retry</button>
-        <button onclick="goHome()">🏠 Home</button>
+                <div class="grid-wrapper">
+                    <div id="grid"></div>
+                </div>
+
+                <div class="score-board">
+                    <div class="score-card player-card">
+                        <div class="score-icon"><i class="fa-solid fa-user"></i></div>
+                        <div class="score-info">
+                            <div class="score-label">YOU</div>
+                            <div class="score-value" id="playerScoreValue">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="score-card tie-card">
+                        <div class="score-icon"><i class="fa-solid fa-handshake"></i></div>
+                        <div class="score-info">
+                            <div class="score-label">TIES</div>
+                            <div class="score-value" id="tieScoreValue">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="score-card cpu-card">
+                        <div class="score-icon"><i class="fa-solid fa-microchip"></i></div>
+                        <div class="score-info">
+                            <div class="score-label">CPU</div>
+                            <div class="score-value" id="cpuScoreValue">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="grid"></div>
-
-    <div class="score">
-        <div id="playerScore">YOU<br>0</div>
-        <div id="tieScore">TIES<br>0</div>
-        <div id="cpuScore">CPU<br>0</div>
+    <div id="overlay"></div>
+    <div id="popup">
+        <div class="popup-icon" id="popupIcon"></div>
+        <h2 id="resultText"></h2>
+        <button class="popup-btn" onclick="closePopup()">
+            <span>Play Again</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
     </div>
-</div>
 
-<div id="overlay"></div>
-<div id="popup">
-    <p id="resultText"></p>
-    <button onclick="closePopup()">OK</button>
-</div>
-
-<script src="Tic-Tac-Toe.js"></script>
+    <script src="Tic-Tac-Toe.js"></script>
 </body>
 </html>
